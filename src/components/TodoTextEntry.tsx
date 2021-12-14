@@ -16,16 +16,27 @@ interface Props {
     placeholder?: string;
     maxLength?: number;
     displayWordCounter?: boolean | false;
+    value: string;
+    onChangeText: (value: string) => void;
+    onPressAddItem: (value: string) => void;
 };
 
-function TodoTextEntry({ style, placeholder, maxLength = 100, displayWordCounter }: Props) {
+function TodoTextEntry({ style, placeholder, maxLength = 100, displayWordCounter, value, onChangeText, onPressAddItem }: Props) {
     const [counter, setCounter] = useState<number | null>(null);
 
-    const onChangeTextHandler = (value: string) => {
-        setCounter(value && displayWordCounter
-            ? value.length
+    const onChangeTextHandler = (text: string) => {
+        onChangeText(text);
+
+        //set counter
+        setCounter(text && displayWordCounter
+            ? text.length
             : null)
     }
+
+    const onPressAddItemHandler = () => {
+        onPressAddItem(value);
+        setCounter(null); //reset counter
+    };
     return (
         <>
             <View style={[style, styles.container]}>
@@ -35,9 +46,10 @@ function TodoTextEntry({ style, placeholder, maxLength = 100, displayWordCounter
                         placeholder={placeholder}
                         placeholderTextColor={Colors.gray.gray_300}
                         maxLength={maxLength}
+                        value={value}
                         onChangeText={onChangeTextHandler} />
                 </View>
-                <Pressable style={styles.actionContainer}>
+                <Pressable style={styles.actionContainer} onPress={onPressAddItemHandler}>
                     <Icon style={styles.actionIcon}
                         name="plus"
                         color={Colors.white}
@@ -66,11 +78,12 @@ const styles = StyleSheet.create({
         padding: 10,
         borderRadius: 2,
         borderWidth: 2,
-        borderColor: Colors.gray.gray_100
+        borderColor: Colors.gray.gray_200
     },
     wordCounterContainer: {
         alignItems: 'flex-end',
-        marginRight: 48
+        marginRight: 48,
+        height: 20
     },
     wordCounterText: {
         color: Colors.gray.gray_300,
