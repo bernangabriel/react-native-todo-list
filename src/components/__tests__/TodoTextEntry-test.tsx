@@ -7,7 +7,7 @@ describe('TodoTextEntry', () => {
 
     //setup
     beforeEach(() => {
-        component = (<TodoTextEntry />);
+        component = (<TodoTextEntry value='' onChangeText={() => { }} onPressAddItem={() => { }} />);
     });
 
     it('should render component and match snapshot', () => {
